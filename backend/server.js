@@ -1,23 +1,3 @@
-/*const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
-
-io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  // TODO: Implement WebSocket events for task management
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
-});
-
-server.listen(5000, () => console.log("Server running on port 5000"));
-*/
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -35,41 +15,46 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
-let tasks = [];   // In-memory storage (for assignment this is fine)
+let tasks = [];
 
-// Send current tasks to new client
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
   
-  socket.emit('sync:tasks', tasks);   // Send all tasks on connect
+  // Send all tasks on connect
+  socket.emit('sync:tasks', tasks);
 
-  // Create new task
+  // Manual refresh request
+  socket.on('get:tasks', () => {
+    socket.emit('sync:tasks', tasks);
+  });
+
+  // Create task
   socket.on('task:create', (newTask) => {
     const task = { 
       id: Date.now().toString(),
+      status: 'todo',           // ← Critical: always default to todo
       ...newTask,
-      createdAt: new Date()
+      createdAt: new Date().toISOString()
     };
     tasks.push(task);
-    io.emit('task:created', task);   // Broadcast to everyone
+    console.log('New task created:', task.title, '→ status:', task.status);
+    io.emit('task:created', task);
   });
 
-  // Update task (title, desc, priority, category, attachments)
-  socket.on('task:update', (updatedTask) => {
-    tasks = tasks.map(task => task.id === updatedTask.id ? updatedTask : task);
+  socket.on('task:updated', (updatedTask) => {
+    tasks = tasks.map(t => t.id === updatedTask.id ? updatedTask : t);
     io.emit('task:updated', updatedTask);
   });
 
-  // Move task between columns (change status)
   socket.on('task:move', ({ id, newStatus }) => {
     const task = tasks.find(t => t.id === id);
     if (task) {
       task.status = newStatus;
+      console.log(`Task ${id} moved to ${newStatus}`);
       io.emit('task:updated', task);
     }
   });
 
-  // Delete task
   socket.on('task:delete', (id) => {
     tasks = tasks.filter(t => t.id !== id);
     io.emit('task:deleted', id);
@@ -80,7 +65,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 server.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
