@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './TeamsModal.css';
 
 const API_URL = 'http://localhost:4000';
 
-function TeamsModal({ isOpen, onClose, userId, onSelectTeam, currentTeamId }) {
+function TeamsModal({ isOpen, onClose, userId }) {
+  const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [view, setView] = useState('list'); // 'list', 'create', 'details'
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -124,13 +126,13 @@ function TeamsModal({ isOpen, onClose, userId, onSelectTeam, currentTeamId }) {
   };
 
   const handleSelectTeam = (team) => {
-    onSelectTeam(team);
     onClose();
+    navigate(`/team/${team.id}`);
   };
 
   const handleBackToPersonal = () => {
-    onSelectTeam(null);
     onClose();
+    navigate('/board');
   };
 
   if (!isOpen) return null;
@@ -178,7 +180,7 @@ function TeamsModal({ isOpen, onClose, userId, onSelectTeam, currentTeamId }) {
                   teams.map(team => (
                     <div 
                       key={team.id} 
-                      className={`team-card ${currentTeamId === team.id ? 'active' : ''}`}
+                      className="team-card"
                     >
                       <div className="team-info" onClick={() => handleSelectTeam(team)}>
                         <h3>{team.name}</h3>

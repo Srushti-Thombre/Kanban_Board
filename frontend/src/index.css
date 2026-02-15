@@ -251,6 +251,75 @@ body {
   transform: translateY(0);
 }
 
+/* === Team Board Header === */
+.team-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-to-personal-btn {
+  background: var(--color-grey-100);
+  color: var(--color-grey-700);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-grey-300);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-to-personal-btn:hover {
+  background: var(--color-grey-200);
+  color: var(--color-grey-900);
+}
+
+.team-member-count {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-grey-500);
+  background: var(--color-grey-100);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+}
+
+/* === Task Assignee Display === */
+.task-assignee {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-grey-600);
+  margin-top: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.task-assignee svg {
+  opacity: 0.7;
+}
+
+/* === Team Task Form === */
+.team-task-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.team-task-form .form-input:first-child {
+  grid-column: 1 / -1;
+}
+
+.assign-select {
+  background-color: var(--color-grey-50);
+  border: 1px dashed var(--color-grey-300);
+}
+
 /* === Task Form === */
 .task-form {
   background: var(--color-white);
@@ -834,6 +903,31 @@ body {
 [data-theme="dark"] .teams-btn:hover {
   background-color: var(--color-grey-600);
   color: var(--color-grey-100);
+}
+
+[data-theme="dark"] .back-to-personal-btn {
+  background-color: var(--color-grey-700);
+  color: var(--color-grey-300);
+  border-color: var(--color-grey-600);
+}
+
+[data-theme="dark"] .back-to-personal-btn:hover {
+  background-color: var(--color-grey-600);
+  color: var(--color-grey-100);
+}
+
+[data-theme="dark"] .team-member-count {
+  background: var(--color-grey-700);
+  color: var(--color-grey-400);
+}
+
+[data-theme="dark"] .task-assignee {
+  color: var(--color-grey-400);
+}
+
+[data-theme="dark"] .assign-select {
+  background-color: var(--color-grey-700);
+  border-color: var(--color-grey-500);
 }
 
 [data-theme="dark"] .kanban-title::before {

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import io from 'socket.io-client';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
-import TeamsModal from './TeamsModal';
 
 const socket = io('http://localhost:4000');
 
@@ -20,15 +19,6 @@ const priorityColors = {
 };
 
 const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-
-const getCategoryClass = (category) => {
-  switch (category?.toLowerCase()) {
-    case 'bug': return 'category-bug';
-    case 'feature': return 'category-feature';
-    case 'enhancement': return 'category-enhancement';
-    default: return 'category-feature';
-  }
-};
 
 const getPriorityCardClass = (priority) => {
   switch (priority?.toLowerCase()) {
@@ -57,16 +47,19 @@ const getCategoryTagClass = (category) => {
   }
 };
 
-function KanbanBoard() {
+function TeamKanbanBoard() {
   const navigate = useNavigate();
+  const { teamId } = useParams();
   const [tasks, setTasks] = useState([]);
-  const [showTeamsModal, setShowTeamsModal] = useState(false);
+  const [teamInfo, setTeamInfo] = useState(null);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
     priority: 'Medium',
-    category: 'Feature'
+    category: 'Feature',
+    assignedTo: ''
   });
 
   useEffect(() => {
@@ -78,9 +71,21 @@ function KanbanBoard() {
 
     const userIdNum = parseInt(userId, 10);
     
+    // Fetch team details and members
+    fetch(`http://localhost:4000/teams/${teamId}/details`)
+      .then(res => res.json())
+      .then(data => {
+        setTeamInfo(data);
+        setTeamMembers(data.members || []);
+      })
+      .catch(err => {
+        console.error('Error fetching team:', err);
+        navigate('/board');
+      });
+
     // Remove any old listeners first
     socket.off('connect');
-    socket.off('sync:tasks');
+    socket.off('sync:team-tasks');
     socket.off('task:created');
     socket.off('task:updated');
     socket.off('task:deleted');
@@ -90,55 +95,65 @@ function KanbanBoard() {
       socket.connect();
     }
 
-    console.log('Setting user:', userIdNum, 'Socket connected:', socket.connected);
-    
-    // Set the user on the server to fetch their tasks
+    // Set user first, then join team
     socket.emit('set:user', userIdNum);
+    socket.emit('join:team', parseInt(teamId, 10));
 
-    // Re-emit set:user on reconnection
+    // Re-emit on reconnection
     socket.on('connect', () => {
-      console.log('Socket reconnected, re-setting user:', userIdNum);
       socket.emit('set:user', userIdNum);
+      socket.emit('join:team', parseInt(teamId, 10));
     });
 
-    socket.on('sync:tasks', (initialTasks) => {
-      console.log('Received sync:tasks →', initialTasks.length, 'tasks');
-      setTasks(initialTasks);
+    socket.on('sync:team-tasks', (teamTasks) => {
+      console.log('Received team tasks:', teamTasks.length);
+      setTasks(teamTasks);
     });
 
     socket.on('task:created', (task) => {
-      console.log('Task received from server:', task);
-      setTasks(prev => [...prev, task]);
+      console.log('Task received:', task);
+      // Only add if it's for this team
+      if (task.teamId === parseInt(teamId, 10)) {
+        setTasks(prev => {
+          // Avoid duplicates
+          if (prev.find(t => t.id === task.id)) return prev;
+          return [...prev, task];
+        });
+      }
     });
 
     socket.on('task:updated', (updatedTask) => {
-      console.log('Task updated:', updatedTask);
       setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t));
     });
 
     socket.on('task:deleted', (id) => {
-      console.log('Task deleted:', id);
       setTasks(prev => prev.filter(t => t.id !== id));
     });
 
     return () => {
+      socket.emit('leave:team');
       socket.off('connect');
-      socket.off('sync:tasks');
+      socket.off('sync:team-tasks');
       socket.off('task:created');
       socket.off('task:updated');
       socket.off('task:deleted');
     };
-  }, [navigate]);
+  }, [navigate, teamId]);
 
   const handleCreateTask = (e) => {
     e.preventDefault();
-    if (!newTask.title) return;
+    if (!newTask.title || !newTask.assignedTo) return;
 
-    const taskData = { ...newTask, status: 'todo' };
-    console.log('Sending task:create →', taskData);
+    const taskData = { 
+      ...newTask, 
+      status: 'todo',
+      teamId: parseInt(teamId, 10),
+      assignedTo: parseInt(newTask.assignedTo, 10)
+    };
+    console.log('Creating team task:', taskData);
     socket.emit('task:create', taskData);
 
-    setNewTask({ title: '', description: '', priority: 'Medium', category: 'Feature' });
+    setNewTask({ title: '', description: '', priority: 'Medium', category: 'Feature', assignedTo: '' });
   };
 
   const handleDragEnd = (result) => {
@@ -152,15 +167,11 @@ function KanbanBoard() {
   };
 
   const refreshBoard = () => {
-    console.log('Manual refresh requested');
-    socket.emit('get:tasks');
+    socket.emit('join:team', parseInt(teamId, 10));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    socket.disconnect();
-    navigate('/');
+  const goBackToPersonal = () => {
+    navigate('/board');
   };
 
   const progressData = columns.map(col => ({
@@ -173,35 +184,37 @@ function KanbanBoard() {
     <div className="kanban-container">
       {/* Header */}
       <div className="kanban-header">
-        <h1 className="kanban-title">Real-time Kanban Board</h1>
+        <div className="team-header-left">
+          <button onClick={goBackToPersonal} className="back-to-personal-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            My Board
+          </button>
+          <h1 className="kanban-title">{teamInfo?.name || 'Team Board'}</h1>
+        </div>
         <div className="header-buttons">
+          <span className="team-member-count">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            {teamMembers.length} members
+          </span>
           <button onClick={refreshBoard} className="refresh-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
             </svg>
             Refresh
           </button>
-          <button onClick={() => setShowTeamsModal(true)} className="teams-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-            Teams
-          </button>
-          <button onClick={handleLogout} className="logout-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
-            </svg>
-            Logout
-          </button>
         </div>
       </div>
 
       {/* Add Task Form */}
       <form onSubmit={handleCreateTask} className="task-form">
-        <h2 className="task-form-title">Add New Task</h2>
-        <div className="task-form-grid">
+        <h2 className="task-form-title">Add Team Task</h2>
+        <div className="task-form-grid team-task-form">
           <input 
             type="text" 
             placeholder="Task Title" 
@@ -234,6 +247,19 @@ function KanbanBoard() {
             <option value="Bug">Bug</option>
             <option value="Feature">Feature</option>
             <option value="Enhancement">Enhancement</option>
+          </select>
+          <select 
+            value={newTask.assignedTo} 
+            onChange={e => setNewTask({...newTask, assignedTo: e.target.value})} 
+            className="form-select assign-select"
+            required
+          >
+            <option value="">Assign to *</option>
+            {teamMembers.map(member => (
+              <option key={member.id} value={member.id}>
+                {member.name}
+              </option>
+            ))}
           </select>
         </div>
         <button type="submit" className="submit-btn">Create Task</button>
@@ -359,15 +385,19 @@ function KanbanBoard() {
                               {task.description && (
                                 <p className="task-description">{task.description}</p>
                               )}
+                              {task.assignedToName && (
+                                <div className="task-assignee">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                  </svg>
+                                  {task.assignedToName}
+                                </div>
+                              )}
                               <div className="task-tags">
                                 <span className={`tag ${getPriorityTagClass(task.priority)}`}>
                                   {task.priority}
                                 </span>
-                                {task.assignedTo && (
-                                  <span className="tag tag-assigned">
-                                    Assigned
-                                  </span>
-                                )}
                                 <span className={`tag ${getCategoryTagClass(task.category)}`}>
                                   {task.category}
                                 </span>
@@ -385,15 +415,8 @@ function KanbanBoard() {
           })}
         </div>
       </DragDropContext>
-
-      {/* Teams Modal */}
-      <TeamsModal
-        isOpen={showTeamsModal}
-        onClose={() => setShowTeamsModal(false)}
-        userId={parseInt(localStorage.getItem('userId'), 10)}
-      />
     </div>
   );
 }
 
-export default KanbanBoard;
+export default TeamKanbanBoard;
