@@ -14,7 +14,7 @@ const columns = [
 const priorityColors = {
   High: '#f12121',
   Medium: '#ad41d8', 
-  Low: '#8b6914'
+  Low: '#db2777'
 };
 
 const priorityOrder = { High: 1, Medium: 2, Low: 3 };

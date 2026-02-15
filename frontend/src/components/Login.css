@@ -1,0 +1,287 @@
+/* ============================================
+   LOGIN PAGE - Black, White, Grey Theme
+   Based on CodePenTemplate-1 flip design
+   ============================================ */
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 2rem;
+}
+
+.login-wrapper {
+  width: 380px;
+  height: 520px;
+  position: relative;
+  perspective: 1000px;
+}
+
+/* === Form Card === */
+.login-form {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #262626;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+.login-form.signup-form {
+  z-index: 99;
+}
+
+.login-form.form-rotated {
+  transform: rotate(-90deg);
+  z-index: 99;
+}
+
+.login-form.signup-form.form-rotated {
+  z-index: 99;
+}
+
+.login-form:not(.form-rotated) {
+  z-index: 100;
+}
+
+/* === Form Title === */
+.form-title {
+  font-size: 2.5rem;
+  text-align: center;
+  color: #262626;
+  text-transform: uppercase;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #ffffff, #e5e5e5);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-title:hover {
+  background: linear-gradient(135deg, #f5f5f5, #d4d4d4);
+}
+
+/* === Form Content === */
+.form-content {
+  padding: 1.5rem 2rem;
+}
+
+.signup-content {
+  padding: 1rem 2rem;
+}
+
+/* === Profile Icon === */
+.profile-icon {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.profile-icon.small {
+  margin-bottom: 0.5rem;
+}
+
+.profile-icon.small svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* === Input Groups === */
+.input-group {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.signup-content .input-group {
+  margin-bottom: 0.75rem;
+}
+
+.signup-content .input-group input {
+  padding: 0.875rem 1rem 0.875rem 3.5rem;
+}
+
+.input-icon {
+  position: absolute;
+  height: 100%;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  color: #262626;
+  background: linear-gradient(135deg, #ffffff, #e5e5e5);
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  z-index: 1;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #262626;
+  font-size: 0.9375rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-group input::placeholder {
+  color: #737373;
+}
+
+.input-group input:focus {
+  outline: none;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+/* === Submit Button === */
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff, #e5e5e5);
+  color: #262626;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.signup-content .submit-button {
+  margin-top: 0.75rem;
+  padding: 0.875rem;
+}
+
+.submit-button:hover {
+  background: linear-gradient(135deg, #f5f5f5, #d4d4d4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  .login-wrapper {
+    width: 320px;
+    height: 480px;
+  }
+  
+  .form-title {
+    font-size: 2rem;
+    padding: 1rem;
+  }
+  
+  .form-content {
+    padding: 1rem 1.5rem;
+  }
+  
+  .profile-icon svg {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* === Animation hint === */
+.login-form.form-rotated .form-title {
+  cursor: pointer;
+}
+
+.login-form.form-rotated:hover {
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================
+   LIGHT MODE OVERRIDES
+   ============================================ */
+
+[data-theme="light"] .login-page {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 50%, #f5f5f5 100%);
+}
+
+[data-theme="light"] .login-form {
+  background-color: #ffffff;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .form-title {
+  color: #ffffff;
+  background: linear-gradient(135deg, #262626, #1a1a1a);
+}
+
+[data-theme="light"] .form-title:hover {
+  background: linear-gradient(135deg, #404040, #262626);
+}
+
+[data-theme="light"] .profile-icon {
+  color: #262626;
+}
+
+[data-theme="light"] .input-icon {
+  color: #ffffff;
+  background: linear-gradient(135deg, #262626, #404040);
+}
+
+[data-theme="light"] .input-group input {
+  background-color: #f5f5f5;
+  color: #262626;
+  border: 1px solid #e5e5e5;
+}
+
+[data-theme="light"] .input-group input::placeholder {
+  color: #737373;
+}
+
+[data-theme="light"] .input-group input:focus {
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(0, 0, 0, 0.1);
+  border-color: #d4d4d4;
+}
+
+[data-theme="light"] .submit-button {
+  background: linear-gradient(135deg, #262626, #1a1a1a);
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .submit-button:hover {
+  background: linear-gradient(135deg, #404040, #262626);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .login-form.form-rotated:hover {
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+

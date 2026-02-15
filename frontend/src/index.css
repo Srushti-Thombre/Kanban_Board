@@ -37,8 +37,8 @@
   --priority-high-text: #f12121;
   --priority-medium-bg: #e9d5ff;
   --priority-medium-text: #ad41d8;
-  --priority-low-bg: #f5e6d3;
-  --priority-low-text: #8b6914;
+  --priority-low-bg: #fbcfe8;
+  --priority-low-text: #db2777;
 
   /* Column Accent Colors */
   --column-todo: #e0e7ff;
@@ -67,6 +67,33 @@
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
+}
+
+/* === Dark Mode Variables === */
+[data-theme="dark"] {
+  --color-white: #1a1a1a;
+  --color-black: #ffffff;
+  --color-grey-50: #262626;
+  --color-grey-100: #2d2d2d;
+  --color-grey-200: #404040;
+  --color-grey-300: #525252;
+  --color-grey-400: #737373;
+  --color-grey-500: #a3a3a3;
+  --color-grey-600: #d4d4d4;
+  --color-grey-700: #e5e5e5;
+  --color-grey-800: #f5f5f5;
+  --color-grey-900: #fafafa;
+
+  /* Column Accent Colors - Darker versions */
+  --column-todo: #312e81;
+  --column-progress: #713f12;
+  --column-done: #064e3b;
+
+  /* Shadows for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
 
 /* === Global Reset & Base Styles === */
@@ -150,6 +177,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-right: 3.5rem; /* Space for theme toggle button */
 }
 
 .refresh-btn:hover {
@@ -425,7 +453,7 @@ body {
 
 .task-card.priority-low {
   background: var(--priority-low-bg);
-  border-color: rgba(139, 105, 20, 0.2);
+  border-color: rgba(219, 39, 119, 0.2);
 }
 
 .task-card.priority-low::before {
@@ -662,4 +690,81 @@ body {
   .kanban-column {
     break-inside: avoid;
   }
+}
+
+/* === Dark Mode Overrides === */
+[data-theme="dark"] body {
+  background-color: #1a1a1a;
+}
+
+[data-theme="dark"] .App {
+  background: linear-gradient(135deg, #1a1a1a 0%, #262626 50%, #1a1a1a 100%);
+}
+
+[data-theme="dark"] .kanban-column.column-todo {
+  background: linear-gradient(180deg, var(--column-todo) 0%, var(--color-grey-50) 100%);
+}
+
+[data-theme="dark"] .kanban-column.column-in-progress {
+  background: linear-gradient(180deg, var(--column-progress) 0%, var(--color-grey-50) 100%);
+}
+
+[data-theme="dark"] .kanban-column.column-done {
+  background: linear-gradient(180deg, var(--column-done) 0%, var(--color-grey-50) 100%);
+}
+
+[data-theme="dark"] .column-title {
+  color: var(--color-grey-700);
+}
+
+[data-theme="dark"] .task-title {
+  color: var(--color-grey-900);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-select {
+  background-color: var(--color-grey-100);
+  border-color: var(--color-grey-300);
+  color: var(--color-grey-800);
+}
+
+[data-theme="dark"] .form-input::placeholder {
+  color: var(--color-grey-500);
+}
+
+[data-theme="dark"] .submit-btn {
+  background: linear-gradient(135deg, #e5e5e5, #ffffff);
+  color: #1a1a1a;
+}
+
+[data-theme="dark"] .refresh-btn {
+  background-color: #e5e5e5;
+  color: #1a1a1a;
+}
+
+[data-theme="dark"] .refresh-btn:hover {
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .kanban-title::before {
+  background: linear-gradient(180deg, var(--chart-todo), var(--chart-progress), var(--chart-done));
+}
+
+[data-theme="dark"] .chart-container,
+[data-theme="dark"] .task-form {
+  background: var(--color-grey-50);
+  border-color: var(--color-grey-200);
+}
+
+[data-theme="dark"] .recharts-text {
+  fill: var(--color-grey-600);
+}
+
+[data-theme="dark"] .recharts-default-tooltip {
+  background: var(--color-grey-100) !important;
+  border-color: var(--color-grey-300) !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-label {
+  color: var(--color-grey-800) !important;
 }
