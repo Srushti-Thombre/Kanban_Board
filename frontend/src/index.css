@@ -1,0 +1,665 @@
+/* ============================================
+   KANBAN BOARD - PROFESSIONAL AESTHETIC CSS
+   Theme: White, Black, Grey + Pastel Accents
+   ============================================ */
+
+/* === CSS Variables === */
+:root {
+  /* Core Colors */
+  --color-white: #ffffff;
+  --color-black: #1a1a1a;
+  --color-grey-50: #fafafa;
+  --color-grey-100: #f5f5f5;
+  --color-grey-200: #e5e5e5;
+  --color-grey-300: #d4d4d4;
+  --color-grey-400: #a3a3a3;
+  --color-grey-500: #737373;
+  --color-grey-600: #525252;
+  --color-grey-700: #404040;
+  --color-grey-800: #262626;
+  --color-grey-900: #171717;
+
+  /* Pastel Colors for Categories */
+  --pastel-bug: #fecaca;
+  --pastel-bug-dark: #f87171;
+  --pastel-bug-text: #991b1b;
+  
+  --pastel-feature: #bfdbfe;
+  --pastel-feature-dark: #60a5fa;
+  --pastel-feature-text: #1e40af;
+  
+  --pastel-enhancement: #d9f99d;
+  --pastel-enhancement-dark: #84cc16;
+  --pastel-enhancement-text: #3f6212;
+
+  /* Priority Colors */
+  --priority-high-bg: #fecaca;
+  --priority-high-text: #f12121;
+  --priority-medium-bg: #e9d5ff;
+  --priority-medium-text: #ad41d8;
+  --priority-low-bg: #f5e6d3;
+  --priority-low-text: #8b6914;
+
+  /* Column Accent Colors */
+  --column-todo: #e0e7ff;
+  --column-progress: #fef9c3;
+  --column-done: #d1fae5;
+
+  /* Chart Colors */
+  --chart-todo: #818cf8;
+  --chart-progress: #fbbf24;
+  --chart-done: #34d399;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* === Global Reset & Base Styles === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-800);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* === App Container === */
+.App {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-grey-100) 0%, var(--color-white) 50%, var(--color-grey-50) 100%);
+}
+
+/* === Kanban Container === */
+.kanban-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* === Header === */
+.kanban-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-grey-200);
+}
+
+.kanban-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-black);
+  letter-spacing: -0.025em;
+}
+
+.kanban-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.5em;
+  background: linear-gradient(180deg, var(--chart-todo), var(--chart-progress), var(--chart-done));
+  margin-right: 1rem;
+  border-radius: 2px;
+  vertical-align: text-bottom;
+}
+
+.refresh-btn {
+  background-color: var(--color-grey-800);
+  color: var(--color-white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.refresh-btn:hover {
+  background-color: var(--color-black);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+}
+
+/* === Task Form === */
+.task-form {
+  background: var(--color-white);
+  padding: 2rem;
+  border-radius: var(--radius-2xl);
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-grey-200);
+}
+
+.task-form-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-form-title::before {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-grey-100);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  color: var(--color-grey-600);
+}
+
+.task-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .task-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--color-grey-200);
+  border-radius: var(--radius-lg);
+  font-size: 0.9375rem;
+  color: var(--color-grey-800);
+  background-color: var(--color-white);
+  transition: all var(--transition-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-grey-400);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-input::placeholder {
+  color: var(--color-grey-400);
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23737373'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.submit-btn {
+  margin-top: 1.25rem;
+  background: linear-gradient(135deg, var(--color-grey-800), var(--color-black));
+  color: var(--color-white);
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* === Progress Chart === */
+.chart-container {
+  background: var(--color-white);
+  padding: 1.5rem;
+  border-radius: var(--radius-2xl);
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-grey-200);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-grey-700);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, var(--chart-todo), var(--chart-done));
+  border-radius: 50%;
+}
+
+/* === Kanban Board Grid === */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .board-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Columns === */
+.kanban-column {
+  background: var(--color-grey-50);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  min-height: 500px;
+  border: 2px solid var(--color-grey-200);
+  transition: all var(--transition-normal);
+}
+
+.kanban-column:hover {
+  border-color: var(--color-grey-300);
+}
+
+.kanban-column.column-todo {
+  background: linear-gradient(180deg, var(--column-todo) 0%, var(--color-grey-50) 100%);
+}
+
+.kanban-column.column-in-progress {
+  background: linear-gradient(180deg, var(--column-progress) 0%, var(--color-grey-50) 100%);
+}
+
+.kanban-column.column-done {
+  background: linear-gradient(180deg, var(--column-done) 0%, var(--color-grey-50) 100%);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.column-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-grey-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.column-count {
+  background: var(--color-white);
+  color: var(--color-grey-600);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.column-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 500px;
+}
+
+/* === Task Cards === */
+.task-card {
+  background: var(--color-white);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+/* Priority-based card backgrounds */
+.task-card.priority-high {
+  background: var(--priority-high-bg);
+  border-color: rgba(241, 33, 33, 0.2);
+}
+
+.task-card.priority-high::before {
+  background: var(--priority-high-text);
+}
+
+.task-card.priority-medium {
+  background: var(--priority-medium-bg);
+  border-color: rgba(173, 65, 216, 0.2);
+}
+
+.task-card.priority-medium::before {
+  background: var(--priority-medium-text);
+}
+
+.task-card.priority-low {
+  background: var(--priority-low-bg);
+  border-color: rgba(139, 105, 20, 0.2);
+}
+
+.task-card.priority-low::before {
+  background: var(--priority-low-text);
+}
+
+.task-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.task-card.dragging {
+  opacity: 0.9;
+  transform: rotate(3deg);
+  box-shadow: var(--shadow-xl);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.375rem;
+}
+
+.task-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+  line-height: 1.3;
+  flex: 1;
+  padding-right: 0.25rem;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--color-grey-400);
+  cursor: pointer;
+  padding: 0.125rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-size: 1rem;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background-color: var(--priority-high-bg);
+  color: var(--priority-high-text);
+}
+
+.task-description {
+  font-size: 0.75rem;
+  color: var(--color-grey-500);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+/* Priority Tags */
+.tag {
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.tag-priority-high {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--priority-high-text);
+}
+
+.tag-priority-medium {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--priority-medium-text);
+}
+
+.tag-priority-low {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--priority-low-text);
+}
+
+/* Category Tags */
+.tag-category-bug {
+  background: var(--pastel-bug);
+  color: var(--pastel-bug-text);
+}
+
+.tag-category-feature {
+  background: var(--pastel-feature);
+  color: var(--pastel-feature-text);
+}
+
+.tag-category-enhancement {
+  background: var(--pastel-enhancement);
+  color: var(--pastel-enhancement-text);
+}
+
+/* === Empty State === */
+.empty-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--color-grey-400);
+  text-align: center;
+  padding: 2rem;
+}
+
+.empty-column-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+.empty-column-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* === Recharts Custom Styling === */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--color-grey-200);
+}
+
+.recharts-text {
+  fill: var(--color-grey-600);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  background: var(--color-white) !important;
+  border: 1px solid var(--color-grey-200) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--color-grey-700) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* === Scrollbar Styling === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-100);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-300);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-grey-400);
+}
+
+/* === Utility Classes === */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.task-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* === Print Styles === */
+@media print {
+  body {
+    background: white;
+  }
+  
+  .refresh-btn,
+  .delete-btn,
+  .task-form {
+    display: none;
+  }
+  
+  .kanban-column {
+    break-inside: avoid;
+  }
+}
