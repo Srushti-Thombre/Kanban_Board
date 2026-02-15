@@ -13,8 +13,11 @@
   "dependencies": {
     "@playwright/test": "^1.50.1",
     "@testing-library/react": "^16.2.0",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^4.22.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.17.1",
     "nodemon": "^3.1.9",
     "socket.io": "^4.8.3",
     "vitest": "^3.0.7"

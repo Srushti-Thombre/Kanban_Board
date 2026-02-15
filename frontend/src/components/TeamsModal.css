@@ -1,0 +1,457 @@
+/* ============================================
+   TEAMS MODAL - Styles
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.teams-modal {
+  background: var(--color-white, #ffffff);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-grey-200, #e5e5e5);
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-grey-900, #1a1a1a);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-grey-500, #737373);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--color-grey-100, #f5f5f5);
+  color: var(--color-grey-700, #404040);
+}
+
+.modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(80vh - 80px);
+}
+
+/* === Teams Actions === */
+.teams-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.personal-board-btn,
+.create-team-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.personal-board-btn {
+  background: var(--color-grey-100, #f5f5f5);
+  color: var(--color-grey-700, #404040);
+}
+
+.personal-board-btn:hover {
+  background: var(--color-grey-200, #e5e5e5);
+}
+
+.create-team-btn {
+  background: var(--color-grey-800, #262626);
+  color: white;
+}
+
+.create-team-btn:hover {
+  background: var(--color-black, #000000);
+}
+
+/* === Teams List === */
+.teams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.no-teams {
+  text-align: center;
+  color: var(--color-grey-500, #737373);
+  padding: 2rem;
+}
+
+.team-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--color-grey-200, #e5e5e5);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.team-card:hover {
+  border-color: var(--color-grey-300, #d4d4d4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.team-card.active {
+  border-color: var(--chart-todo, #818cf8);
+  background: rgba(129, 140, 248, 0.05);
+}
+
+.team-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-grey-900, #1a1a1a);
+  margin: 0 0 0.25rem;
+}
+
+.team-info p {
+  font-size: 0.8rem;
+  color: var(--color-grey-500, #737373);
+  margin: 0 0 0.5rem;
+}
+
+.member-count {
+  font-size: 0.75rem;
+  color: var(--color-grey-400, #a3a3a3);
+}
+
+.manage-btn {
+  background: var(--color-grey-100, #f5f5f5);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-grey-700, #404040);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.manage-btn:hover {
+  background: var(--color-grey-200, #e5e5e5);
+}
+
+/* === Create Team Form === */
+.create-team-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-grey-700, #404040);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-grey-300, #d4d4d4);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--chart-todo, #818cf8);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cancel-btn,
+.submit-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-btn {
+  background: var(--color-grey-100, #f5f5f5);
+  color: var(--color-grey-700, #404040);
+}
+
+.cancel-btn:hover {
+  background: var(--color-grey-200, #e5e5e5);
+}
+
+.submit-btn {
+  background: var(--color-grey-800, #262626);
+  color: white;
+}
+
+.submit-btn:hover {
+  background: var(--color-black, #000000);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 6px;
+}
+
+/* === Team Details === */
+.team-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--color-grey-600, #525252);
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--color-grey-900, #1a1a1a);
+}
+
+.team-description {
+  color: var(--color-grey-600, #525252);
+  font-size: 0.9rem;
+}
+
+/* === Add Member Section === */
+.add-member-section h4,
+.members-section h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-grey-700, #404040);
+  margin: 0 0 0.75rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-grey-300, #d4d4d4);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--chart-todo, #818cf8);
+}
+
+.search-results {
+  margin-top: 0.5rem;
+  border: 1px solid var(--color-grey-200, #e5e5e5);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-grey-100, #f5f5f5);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--color-grey-800, #262626);
+  display: block;
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: var(--color-grey-500, #737373);
+}
+
+.add-btn {
+  background: var(--chart-done, #34d399);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  background: #22c55e;
+}
+
+/* === Members List === */
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--color-grey-50, #fafafa);
+  border-radius: 10px;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.member-name {
+  font-weight: 500;
+  color: var(--color-grey-800, #262626);
+}
+
+.member-email {
+  font-size: 0.8rem;
+  color: var(--color-grey-500, #737373);
+}
+
+.admin-badge {
+  font-size: 0.7rem;
+  background: var(--chart-todo, #818cf8);
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.remove-btn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* === Dark Mode === */
+[data-theme="dark"] .teams-modal {
+  background: var(--color-grey-900, #1a1a1a);
+}
+
+[data-theme="dark"] .modal-header {
+  border-color: var(--color-grey-700, #404040);
+}
+
+[data-theme="dark"] .modal-header h2 {
+  color: var(--color-grey-100, #f5f5f5);
+}
+
+[data-theme="dark"] .team-card {
+  border-color: var(--color-grey-700, #404040);
+}
+
+[data-theme="dark"] .team-info h3 {
+  color: var(--color-grey-100, #f5f5f5);
+}
+
+[data-theme="dark"] .form-group label {
+  color: var(--color-grey-300, #d4d4d4);
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea,
+[data-theme="dark"] .search-input {
+  background: var(--color-grey-800, #262626);
+  border-color: var(--color-grey-600, #525252);
+  color: var(--color-grey-100, #f5f5f5);
+}
+
+[data-theme="dark"] .member-item {
+  background: var(--color-grey-800, #262626);
+}
+
+[data-theme="dark"] .member-name,
+[data-theme="dark"] .user-name {
+  color: var(--color-grey-100, #f5f5f5);
+}

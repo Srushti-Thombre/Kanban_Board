@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import io from 'socket.io-client';
+import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
+import TeamsModal from './TeamsModal';
 
 const socket = io('http://localhost:4000');
 
@@ -56,7 +58,10 @@ const getCategoryTagClass = (category) => {
 };
 
 function KanbanBoard() {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+  const [showTeamsModal, setShowTeamsModal] = useState(false);
+  const [currentTeam, setCurrentTeam] = useState(null);
 
   const [newTask, setNewTask] = useState({
     title: '',
@@ -66,7 +71,36 @@ function KanbanBoard() {
   });
 
   useEffect(() => {
-    console.log('Socket connected, listening for events...');
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate("/");
+      return;
+    }
+
+    const userIdNum = parseInt(userId, 10);
+    
+    // Remove any old listeners first
+    socket.off('connect');
+    socket.off('sync:tasks');
+    socket.off('task:created');
+    socket.off('task:updated');
+    socket.off('task:deleted');
+    
+    // Reconnect if disconnected
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    console.log('Setting user:', userIdNum, 'Socket connected:', socket.connected);
+    
+    // Set the user on the server to fetch their tasks
+    socket.emit('set:user', userIdNum);
+
+    // Re-emit set:user on reconnection
+    socket.on('connect', () => {
+      console.log('Socket reconnected, re-setting user:', userIdNum);
+      socket.emit('set:user', userIdNum);
+    });
 
     socket.on('sync:tasks', (initialTasks) => {
       console.log('Received sync:tasks →', initialTasks.length, 'tasks');
@@ -88,8 +122,14 @@ function KanbanBoard() {
       setTasks(prev => prev.filter(t => t.id !== id));
     });
 
-    return () => socket.disconnect();
-  }, []);
+    return () => {
+      socket.off('connect');
+      socket.off('sync:tasks');
+      socket.off('task:created');
+      socket.off('task:updated');
+      socket.off('task:deleted');
+    };
+  }, [navigate]);
 
   const handleCreateTask = (e) => {
     e.preventDefault();
@@ -117,6 +157,13 @@ function KanbanBoard() {
     socket.emit('get:tasks');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    socket.disconnect();
+    navigate('/');
+  };
+
   const progressData = columns.map(col => ({
     name: col.title,
     count: tasks.filter(t => t.status === col.id).length,
@@ -128,12 +175,28 @@ function KanbanBoard() {
       {/* Header */}
       <div className="kanban-header">
         <h1 className="kanban-title">Real-time Kanban Board</h1>
-        <button onClick={refreshBoard} className="refresh-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-          </svg>
-          Refresh Board
-        </button>
+        <div className="header-buttons">
+          <button onClick={refreshBoard} className="refresh-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            </svg>
+            Refresh
+          </button>
+          <button onClick={() => setShowTeamsModal(true)} className="teams-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            {currentTeam ? currentTeam.name : 'Teams'}
+          </button>
+          <button onClick={handleLogout} className="logout-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+            </svg>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Add Task Form */}
@@ -303,6 +366,11 @@ function KanbanBoard() {
                                 <span className={`tag ${getPriorityTagClass(task.priority)}`}>
                                   {task.priority}
                                 </span>
+                                {task.assignedTo && (
+                                  <span className="tag tag-assigned">
+                                    Assigned
+                                  </span>
+                                )}
                                 <span className={`tag ${getCategoryTagClass(task.category)}`}>
                                   {task.category}
                                 </span>
@@ -320,6 +388,21 @@ function KanbanBoard() {
           })}
         </div>
       </DragDropContext>
+
+      {/* Teams Modal */}
+      <TeamsModal
+        isOpen={showTeamsModal}
+        onClose={() => setShowTeamsModal(false)}
+        userId={parseInt(localStorage.getItem('userId'), 10)}
+        currentTeamId={currentTeam?.id}
+        onSelectTeam={(team) => {
+          setCurrentTeam(team);
+          setShowTeamsModal(false);
+          if (team) {
+            socket.emit('join:team', team.id);
+          }
+        }}
+      />
     </div>
   );
 }

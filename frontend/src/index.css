@@ -177,7 +177,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-right: 3.5rem; /* Space for theme toggle button */
 }
 
 .refresh-btn:hover {
@@ -187,6 +186,68 @@ body {
 }
 
 .refresh-btn:active {
+  transform: translateY(0);
+}
+
+/* === Header Buttons Container === */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 3.5rem; /* Space for theme toggle button */
+}
+
+/* === Logout Button === */
+.logout-btn {
+  background-color: var(--priority-high-bg);
+  color: var(--priority-high-text);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logout-btn:hover {
+  background-color: var(--priority-high-text);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* === Teams Button === */
+.teams-btn {
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-700);
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--color-grey-300);
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.teams-btn:hover {
+  background-color: var(--color-grey-200);
+  color: var(--color-grey-900);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.teams-btn:active {
   transform: translateY(0);
 }
 
@@ -550,6 +611,14 @@ body {
   color: var(--priority-low-text);
 }
 
+/* Assigned Tag */
+.tag-assigned {
+  background: var(--color-grey-200);
+  color: var(--color-grey-600);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
 /* Category Tags */
 .tag-category-bug {
   background: var(--pastel-bug);
@@ -744,6 +813,27 @@ body {
 
 [data-theme="dark"] .refresh-btn:hover {
   background-color: #ffffff;
+}
+
+[data-theme="dark"] .logout-btn {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .logout-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .teams-btn {
+  background-color: var(--color-grey-700);
+  color: var(--color-grey-200);
+  border-color: var(--color-grey-600);
+}
+
+[data-theme="dark"] .teams-btn:hover {
+  background-color: var(--color-grey-600);
+  color: var(--color-grey-100);
 }
 
 [data-theme="dark"] .kanban-title::before {

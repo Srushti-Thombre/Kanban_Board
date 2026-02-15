@@ -2,26 +2,76 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
+const API_URL = 'http://localhost:4000';
+
 function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    // For demo purposes, just navigate to the board
-    if (loginData.email && loginData.password) {
+    setError('');
+    
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: loginData.email,
+          password: loginData.password
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+      
+      localStorage.setItem('userId', data.userId);
+      localStorage.setItem('userName', data.name);
       navigate('/board');
+    } catch (err) {
+      setError('Server error. Please try again.');
     }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
-    // For demo purposes, just navigate to login
-    if (signupData.username && signupData.email && signupData.password && signupData.password === signupData.confirmPassword) {
+    setError('');
+    
+    if (signupData.password !== signupData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: signupData.username,
+          email: signupData.email,
+          password: signupData.password
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setError(data.message || 'Signup failed');
+        return;
+      }
+      
       setIsSignUp(false);
       setSignupData({ username: '', email: '', password: '', confirmPassword: '' });
+      setError('');
+    } catch (err) {
+      setError('Server error. Please try again.');
     }
   };
 
@@ -70,6 +120,7 @@ function Login() {
               />
             </div>
             <button type="submit" className="submit-button">Login</button>
+            {error && !isSignUp && <div className="error-message">{error}</div>}
           </form>
         </div>
 
@@ -139,6 +190,7 @@ function Login() {
               />
             </div>
             <button type="submit" className="submit-button">Sign Up</button>
+            {error && isSignUp && <div className="error-message">{error}</div>}
           </form>
         </div>
       </div>

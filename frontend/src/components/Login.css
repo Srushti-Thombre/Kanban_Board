@@ -285,3 +285,19 @@
     0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
+/* === Error Message === */
+.error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="light"] .error-message {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
