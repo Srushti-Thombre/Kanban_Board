@@ -1,37 +1,47 @@
-# 📝 WebSocket-Powered Kanban Board - Candidate Guide
+# 📝 Kanban_Board - Real-Time Collaborative Kanban Board
 
-## 📌 Project Overview
+A modern, real-time Kanban board application built with React and WebSockets, featuring team collaboration, user authentication, and beautiful visualizations.
 
-This project involves building a **real-time Kanban board** where users can **add, update, delete, move tasks between columns, upload attachments, assign priority & category, and visualize progress**.
-
-The goal is to assess proficiency in:  
-✅ **React** (for UI)  
-✅ **WebSockets (Socket.IO)** (for real-time updates)  
-✅ **Vitest + React Testing Library** (for unit & integration testing)  
-✅ **Playwright** (for end-to-end testing)
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-4.x-black?logo=socket.io)
+![MySQL](https://img.shields.io/badge/MySQL-8.x-blue?logo=mysql)
+![Vite](https://img.shields.io/badge/Vite-5.x-purple?logo=vite)
 
 ---
 
-## 📂 Project Structure
+## ✨ Features
 
-```
-websocket-kanban-vitest-playwright
-│── backend/                     # Node.js WebSocket server
-│   ├── server.js                 # Express + Socket.IO WebSocket setup
-│   ├── package.json              # Backend dependencies
-│
-│── frontend/                     # React app
-│   ├── src/
-│   │   ├── components/           # UI components
-│   │   │   ├── KanbanBoard.jsx
-│   │   ├── tests/                # All test cases
-│   │   │   ├── unit/             # Unit tests (Vitest)
-│   │   │   ├── integration/      # Integration tests (Vitest)
-│   │   │   ├── e2e/              # End-to-end tests (Playwright)
-│   ├── package.json
-│
-└── README.md                     # Project guide
-```
+### 🎯 Task Management
+
+- **Drag & Drop** - Seamlessly move tasks between To Do, In Progress, and Done columns
+- **Priority Levels** - Assign High, Medium, or Low priority with color-coded cards
+- **Categories** - Organize tasks as Bug, Feature, or Enhancement
+- **Real-time Sync** - Changes reflect instantly across all connected users
+
+### 👥 Team Collaboration
+
+- **Create Teams** - Build teams and invite members by email
+- **Shared Boards** - Team members see all team tasks in real-time
+- **Task Assignment** - Assign tasks to specific team members
+- **Personal + Team View** - Tasks assigned to you appear on your personal board
+
+### 📊 Visualizations
+
+- **Progress Overview** - Bar chart showing task distribution across columns
+- **Priority Analysis** - Pie chart displaying tasks by priority level
+- **Live Updates** - Charts update in real-time as tasks move
+
+### 🔐 Authentication
+
+- **User Accounts** - Secure signup and login with password hashing
+- **Session Management** - Persistent login with localStorage
+- **Protected Routes** - Authenticated access to boards
+
+### 🎨 User Experience
+
+- **Dark/Light Theme** - Toggle between themes with a single click
+- **Responsive Design** - Works beautifully on desktop and tablet
+- **Modern UI** - Clean, professional aesthetic with smooth animations
 
 ---
 
@@ -48,147 +58,138 @@ Task A   →  Task B        →  Task C
 Task D   →  Task E        →  Task F
 ```
 
-### 🔍 Reference Applications:
+---
 
-| Kanban App      | Description                 | Link                                                                   |
-| --------------- | --------------------------- | ---------------------------------------------------------------------- |
-| **Trello**      | Task management tool        | [trello.com](https://trello.com/)                                      |
-| **Jira Kanban** | Agile development workflows | [atlassian.com/software/jira](https://www.atlassian.com/software/jira) |
-| **ClickUp**     | Project management tool     | [clickup.com](https://www.clickup.com/)                                |
+## 🚀 Getting Started
 
-🔗 **Open-source Kanban boards:**
+### Prerequisites
 
-- **[Wekan](https://github.com/wekan/wekan)** – Self-hosted Trello alternative
-- **[Planka](https://github.com/plankanban/planka)** – Open-source React Kanban
+- Node.js 18+
+- MySQL 8.x
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/Kanban_Board.git
+   cd Kanban_Board
+   ```
+
+2. **Set up the database**
+
+   Create a MySQL database and configure your credentials in `backend/db.js`.
+
+3. **Install dependencies**
+
+   ```bash
+   # Backend
+   cd backend
+   npm install
+
+   # Frontend
+   cd ../frontend
+   npm install
+   ```
+
+4. **Start the application**
+
+   ```bash
+   # Terminal 1 - Backend (port 4000)
+   cd backend
+   node server.js
+
+   # Terminal 2 - Frontend (port 5173)
+   cd frontend
+   npm run dev
+   ```
+
+5. **Open in browser**
+   ```
+   http://localhost:5173
+   ```
 
 ---
 
-## 🚀 Take Home Task
+## 📂 Project Structure
 
-### 🔹 Features to Implement
-
-- Create, update, delete, and move tasks between columns.
-- Upload attachments for tasks.
-- Assign task priority & category using a select dropdown.
-- Visualize task progress using a graph/chart.
-- Sync updates in real-time using WebSockets.
-- Test the application using Vitest + React testing library (unit/integration) and Playwright (E2E tests).
-
-### 1️⃣ Backend (Node.js + WebSocket)
-
-- Set up a WebSocket (Socket.IO or native WebSockets) server.
-- Store tasks in memory or use a database (MongoDB preferred).
-- Implement WebSocket events for:
-  - `task:create` → Adds a new task.
-  - `task:update` → Updates a task (title, description, priority, category, attachments).
-  - `task:move` → Moves a task between columns.
-  - `task:delete` → Removes a task.
-  - `sync:tasks` → Sends all tasks to newly connected clients.
-
-### 2️⃣ Frontend (React + WebSocket)
-
-Kanban Board Features:
-
-- Implement a Kanban board UI with the following columns:
-  - To Do
-  - In Progress
-  - Done
-- Tasks should be draggable between columns using React DnD or a similar library.
-- The UI should update in real-time when a user makes changes.
-- Display a loading indicator when waiting for the server to sync.
-
-Additional UI Features:
-
-1. **Priority & Category Selection (Dropdown)**
-
-   - Each task should have a priority (Low, Medium, High).
-   - Each task should have a category (Bug, Feature, Enhancement).
-   - Implement using a React select dropdown (e.g., react-select).
-
-2. **File Upload**
-
-   - Users can upload attachments (e.g., images, PDFs) to tasks.
-   - Show a preview of the uploaded file (if it's an image).
-   - Store the file URL in state (simulated backend storage).
-
-3. **Task Progress Graph (Chart.js or Recharts)**
-   - Implement a task progress chart that shows:
-     - Number of tasks in each column.
-     - The percentage of completion (Done vs. total tasks).
-   - Update the graph in real-time as tasks move.
-
-### 3️⃣ Unit & Integration Testing (Vitest + React Testing Library)
-
-- Unit test core functions:
-  - Adding, updating, and deleting tasks.
-  - WebSocket connection logic.
-- Integration test:
-  - Ensure WebSocket updates correctly sync state across multiple clients.
-  - Validate drag-and-drop functionality for moving tasks.
-
-### 4️⃣ E2E Testing (Playwright)
-
-✅ **Kanban Board**
-
-- User can create a task.
-- User can drag and drop a task between columns.
-- UI updates in real-time when another user modifies tasks.
-- User can delete a task and see it removed.
-
-✅ **Dropdown Select Testing**
-
-- User can select a priority level.
-- User can change the task category and verify the update.
-
-✅ **File Upload Testing**
-
-- User can upload a file.
-- Uploaded files display correctly.
-- Invalid files (e.g., non-supported formats) show an error message.
-
-✅ **Graph Testing**
-
-- Task counts update correctly in the graph as tasks move.
-- Graph re-renders dynamically when new tasks are added.
+```
+taskflow-kanban/
+├── backend/
+│   ├── server.js          # Express + Socket.IO server
+│   ├── db.js              # MySQL connection
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── KanbanBoard.jsx      # Personal task board
+│   │   │   ├── TeamKanbanBoard.jsx  # Team collaboration board
+│   │   │   ├── TeamsModal.jsx       # Team management modal
+│   │   │   ├── Login.jsx            # Authentication
+│   │   │   └── ThemeToggle.jsx      # Dark/light mode
+│   │   ├── context/
+│   │   │   └── ThemeContext.jsx     # Theme state management
+│   │   ├── App.jsx
+│   │   └── index.css                # Global styles
+│   └── package.json
+│
+└── README.md
+```
 
 ---
 
-## 📊 Evaluation Criteria
+## 🛠 Tech Stack
 
-| **Criteria**                      | **Weightage** | **Key Points**                                     |
-| --------------------------------- | ------------- | -------------------------------------------------- |
-| **WebSocket Implementation**      | 10%           | Real-time updates, event handling, error handling  |
-| **React Component Structure**     | 10%           | Proper separation of concerns, reusable components |
-| **Testing**                       | 50%           | Unit, integration, and E2E tests passing           |
-| **Code Quality & Best Practices** | 20%           | Clean, well-documented, readable code              |
-| **UI & UX**                       | 10%           | Intuitive design, responsive layout                |
-
----
-
-## 🔗 Useful Resources
-
-📘 **Kanban & WebSockets**
-
-- [What is Kanban? (Atlassian)](https://www.atlassian.com/agile/kanban)
-- [WebSockets in Node.js (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
-
-🧪 **Vitest (Unit & Integration Testing)**
-
-- [Frontend Testing Guide](https://www.netguru.com/blog/front-end-testing)
-- [Vitest Docs](https://vitest.dev/)
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-
-🎭 **Playwright (E2E Testing)**
-
-- [Playwright Docs](https://playwright.dev/)
+| Layer       | Technology                       |
+| ----------- | -------------------------------- |
+| Frontend    | React 19, Vite, React Router     |
+| Styling     | CSS Variables, CSS Grid, Flexbox |
+| Drag & Drop | @hello-pangea/dnd                |
+| Charts      | Recharts                         |
+| Real-time   | Socket.IO                        |
+| Backend     | Node.js, Express                 |
+| Database    | MySQL                            |
+| Auth        | bcrypt                           |
 
 ---
 
-## 🚀 Next Steps for Candidates
+### Personal Board
 
-🎯 Implement **WebSocket logic** in the Kanban board  
-🎯 Add **state management** for tasks  
-🎯 Write **unit, integration, and E2E tests**  
-🎯 Deploy and verify real-time updates
+Clean, minimal interface for managing your personal tasks with drag-and-drop functionality.
 
-🛠 **Final Tip:** Pay attention to **code quality, real-time interactions, and testing coverage**. Good luck! 🚀
+### Team Board
+
+Collaborative workspace where team members can create and assign tasks in real-time.
+
+### Dark Mode
+
+Easy on the eyes with a sleek dark theme option.
+
+---
+
+## 🔮 Future Enhancements
+
+- [ ] Due dates and reminders
+- [ ] File attachments
+- [ ] Task comments
+- [ ] Email notifications
+- [ ] Mobile app (React Native)
+- [ ] Keyboard shortcuts
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+---
+
+Built with ❤️ using React and Socket.IO
